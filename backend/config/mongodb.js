@@ -11,10 +11,8 @@ mongoose.connect(MONGODB_URI, {
     })
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-const initDB = (database) => {
+const initDB = (db) => {
     console.log("MongoDB initialization script");
-    const db = database.getSiblingDB('insightstream');
-
     // Create collections
     db.createCollection('contents');
     db.createCollection('users');

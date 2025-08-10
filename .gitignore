@@ -19,9 +19,36 @@ yarn-error.log*
 Thumbs.db
 
 # Environment files
-**/.env
-**/.env.local
-**/.env.*.local
+.env
+.env.local
+.env.production
+.env.staging
+backend/.env
+frontend/.env.local
+
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/.next/
+frontend/out/
+frontend/build/
+backend/dist/
+
+# Logs
+logs/
+*.log
+
+# Database
+*.sqlite
+*.db
+dump.rdb
+
+# OS
+.DS_Store
+Thumbs.db
 
 # IDE/editor folders
 .vscode/

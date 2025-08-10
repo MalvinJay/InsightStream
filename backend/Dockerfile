@@ -9,8 +9,15 @@ RUN apk add --no-cache python3 make g++
 # Copy package files
 COPY package*.json ./
 
+ARG NODE_ENV=production
+ENV NODE_ENV=$NODE_ENV
+
 # Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN if [ "$NODE_ENV" = "production" ]; then \
+      npm ci --omit=dev && npm cache clean --force; \
+    else \
+      npm install; \
+    fi
 
 # Copy source code
 COPY . .
@@ -31,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node healthcheck.js || exit 1
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

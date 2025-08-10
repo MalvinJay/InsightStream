@@ -1,15 +1,9 @@
-version: "3.8"
-
 services:
-  # Redis with RedisStack for Vector Search
   redis:
-    image: redis:8 #redis/redis-stack-server:latest
+    image: redis:8
     container_name: insightstream-redis
     ports:
       - "6379:6379"
-      - "8001:8001" # RedisInsight
-    environment:
-      - REDIS_ARGS=--appendonly yes
     volumes:
       - redis_data:/data
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
@@ -40,11 +34,12 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - NODE_ENV=production
-      - PORT=5000
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - MONGODB_URI=mongodb://mongodb:27017/insightstream
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${REDIS_ENVIRONMENT_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - MONGODB_URI=${MONGODB_URI}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     depends_on:
       - redis
@@ -65,8 +60,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:5000
-      - NEXT_PUBLIC_WS_URL=http://localhost:5000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_URL}
+      - NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_URL}
     depends_on:
       - backend
     networks:
