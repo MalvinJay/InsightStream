@@ -10,7 +10,7 @@ class AIService {
     async generateEmbedding(text) {
         try {
             const response = await openai.embeddings.create({
-                model: "text-embedding-ada-002",
+                model: "text-embedding-3-small",
                 input: text.slice(0, 8000) // Limit text length
             });
 
