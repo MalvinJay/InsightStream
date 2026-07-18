@@ -1,5 +1,6 @@
 const express = require('express');
 const vectorService = require('../services/vectorService');
+const aiService = require('../services/aiService');
 const Content = require('../models/Content');
 
 const router = express.Router();
@@ -65,6 +66,27 @@ router.get('/personalized/:userId', async (req, res) => {
         console.error('Personalized recommendations failed:', error);
         res.status(500).json({ error: 'Failed to get recommendations' });
     }
+});
+
+// 
+router.post('/ask', async (req, res) => {
+    const { question } = req.body;
+
+    // 1. Retrieve similar content
+    const similar = await vectorService.findSimilar(question, 5);
+
+    // 2. Load full content
+    const docs = await Content.find({
+        _id: { $in: similar.map(s => s.content_id) }
+    });
+
+    // 3. Build context
+    const context = docs.map(d => d.content).join('\n\n');
+
+    // 4. Ask GPT using retrieved context
+    const answer = await aiService.answerWithContext(question, context);
+
+    res.json({ answer, sources: docs });
 });
 
 module.exports = router;
