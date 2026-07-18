@@ -17,7 +17,7 @@ const subClient = redisClient.duplicate();
 // Vector search configuration
 const vectorConfig = {
     index: 'content_embeddings',
-    dimensions: 768, // sentence-transformers dimension
+    dimensions: 1536, // sentence-transformers dimension
     algorithm: 'HNSW',
     distance: 'COSINE'
 };
